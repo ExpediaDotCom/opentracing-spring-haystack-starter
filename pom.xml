@@ -36,6 +36,7 @@
 
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-scalatest-plugin.version>1.0</maven-scalatest-plugin.version>
+        <maven-jacoco-plugin.version>0.8.3</maven-jacoco-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -77,8 +78,39 @@
                     <artifactId>scalatest-maven-plugin</artifactId>
                     <version>${maven-scalatest-plugin.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${maven-jacoco-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>jacoco-initialize</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>jacoco-site</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
     <developers>
