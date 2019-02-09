@@ -8,6 +8,7 @@ Table of Contents
       * [Spring Application dependency](#spring-application-dependency)
       * [Other dependencies](#other-dependencies)
       * [Sample yaml/properties file](#sample-yamlproperties-file)
+      * [Example Project](#example-project)
    * [Details](#details)
       * [Using this library](#using-this-library)
       * [Defaults](#defaults)
@@ -24,11 +25,10 @@ Table of Contents
 
 ## Instrumenting Spring Boot or Spring Web applications
 
-One can use this library to instrument spring web applications to send tracing information to Opentracing complicant [Haystack](https://expediadotcom.github.io/haystack/) distributed tracing platform. 
+One can use [opentracing-spring-haystack-web-starter](opentracing-spring-haystack-web-starter) or [opentracing-spring-haystack-cloud-starter](opentracing-spring-haystack-cloud-starter) to instrument spring boot or spring web applications and send tracing information to Opentracing complicant [Haystack](https://expediadotcom.github.io/haystack/) server, distributed tracing platform. 
 
-This library actually uses [io.opentracing.contrib:opentracing-spring-web-starter](https://github.com/opentracing-contrib/java-spring-web) to instrument a spring application. Implementation of `io.opentracing.Tracer` required by `opentracing-spring-web-starter` is provided by [com.expedia.www:opentracing-spring-haystack-starter](https://github.com/ExpediaDotCom/haystack-client-java/blob/opentracing-spring-haystack-starter/integrations/opentracing-spring-haystack-starter/src/main/java/com/expedia/haystack/opentracing/spring/starter/TracerConfigurer.java).
-
-This library is purely a convenience library that in turn depends on `io.opentracing.contrib:opentracing-spring-web-starter` and `com.expedia.www:opentracing-spring-haystack-starter` to reduce the dependency configuration required to instrument a spring stack using Opentracing and Haystack.
+These libraries in turn use [opentracing-spring-haystack-starter](opentracing-spring-haystack-starter) which helps build the 
+`io.opentracing.Tracer` instance required by underlying [io.opentracing.contrib : opentracing-spring-web-starter](https://github.com/opentracing-contrib/java-spring-web). 
 
 ## Quick Start
 
@@ -55,6 +55,8 @@ Alternately, one can use `opentracing-spring-haystack-cloud-starter` instead. It
     <version>${opentracing-spring-haystack-cloud-starter.version}</version>
 </dependency>
 ```
+
+[opentracing-spring-cloud-starter](https://github.com/opentracing-contrib/java-spring-cloud#opentracing-spring-cloud) provides ready instrumentation of various known OSS projects like Redis, Hystrix etc.,
 
 ### Spring Application dependency
 
@@ -105,6 +107,10 @@ opentracing:
         host: haystack-agent
         port: 3400
 ```
+
+### Example Project
+
+One can checkout the example project using this integration @ [https://github.com/ExpediaDotCom/opentracing-spring-haystack-example](https://github.com/ExpediaDotCom/opentracing-spring-haystack-example) 
 
 ## Details
 
