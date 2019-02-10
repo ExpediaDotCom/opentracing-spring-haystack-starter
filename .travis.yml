@@ -14,11 +14,6 @@ cache:
   directories:
   - $HOME/.m2
 
-addons:
-  hosts:
-    - haystack-agent
-    - kafkasvc
-
 install:
   - ./mvnw --batch-mode install jacoco:report -B -V
   - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
