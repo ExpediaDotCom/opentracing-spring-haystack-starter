@@ -10,13 +10,13 @@
     <packaging>pom</packaging>
     <name>Opentracing Spring Haystack Stater Parent POM</name>
     <description>Opentracing Spring Haystack Stater Parent POM</description>
-    <url>https://github.com/mchandramouli/opentracing-spring-haystack-starter</url>
+    <url>https://github.com/ExpediaDotCom/opentracing-spring-haystack-starter</url>
 
     <scm>
-        <connection>scm:git:git://github.com/mchandramouli/opentracing-spring-haystack-starter.git</connection>
-        <developerConnection>scm:git:ssh://github.com/mchandramouli/opentracing-spring-haystack-starter.git
+        <connection>scm:git:git://github.com/ExpediaDotCom/opentracing-spring-haystack-starter.git</connection>
+        <developerConnection>scm:git:ssh://github.com/ExpediaDotCom/opentracing-spring-haystack-starter.git
         </developerConnection>
-        <url>http://github.com/mchandramouli/opentracing-spring-haystack-starter</url>
+        <url>http://github.com/ExpediaDotCom/opentracing-spring-haystack-starter</url>
         <tag>HEAD</tag>
     </scm>
 
