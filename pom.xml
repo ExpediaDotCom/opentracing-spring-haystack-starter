@@ -6,7 +6,7 @@
 
     <groupId>com.expedia.www</groupId>
     <artifactId>opentracing-spring-haystack-starter-parent</artifactId>
-    <version>0.2.6-SNAPSHOT</version>
+    <version>0.2.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Opentracing Spring Haystack Stater Parent POM</name>
     <description>Opentracing Spring Haystack Stater Parent POM</description>
