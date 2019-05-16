@@ -25,6 +25,7 @@ import com.expedia.www.haystack.client.dispatchers.Dispatcher;
 import com.expedia.www.haystack.client.dispatchers.LoggerDispatcher;
 import com.expedia.www.haystack.client.dispatchers.RemoteDispatcher;
 import com.expedia.www.haystack.client.dispatchers.clients.HttpCollectorClient;
+import com.expedia.www.haystack.client.idgenerators.RandomUUIDGenerator;
 import com.expedia.www.haystack.client.metrics.MetricsRegistry;
 import com.expedia.www.haystack.client.metrics.NoopMetricsRegistry;
 import com.expedia.www.haystack.client.metrics.micrometer.MicrometerMetricsRegistry;
@@ -66,7 +67,7 @@ public class TracerConfigurer {
         final Optional<Collection<TracerCustomizer>> tracerCustomizers =
                 Optional.ofNullable(tracerCustomizersProvider.getIfAvailable());
         tracerCustomizers.ifPresent(c -> c.forEach(customizer -> customizer.customize(tracerBuilder)));
-        return tracerBuilder.build();
+        return tracerBuilder.withIdGenerator(new RandomUUIDGenerator()).build();
     }
 
     @Bean
