@@ -24,6 +24,7 @@ Table of Contents
             * [Dispatcher Bean](#dispatcher-bean)
          * [Metrics](#metrics)
          * [Customizing Tracer](#customizing-tracer)
+   * [Deployment](#deployment)
 
 
 ## Instrumenting Spring Boot or Spring Web applications
@@ -259,3 +260,11 @@ For example, adding the following two dependencies to the application will autom
 
 Haystack Tracer's [Builder](https://github.com/ExpediaDotCom/haystack-client-java/blob/master/core/src/main/java/com/expedia/www/haystack/client/Tracer.java#L356) class exposes a number of possible configurations that can be used to customize the `Tracer` instance built by this library and used by [Opentracing's Spring integration](https://github.com/opentracing-contrib/java-spring-web/). To customize the Tracer instance, one can create a bean of type [TracerCustomizer](opentracing-spring-haystack-starter/src/main/java/com/expedia/haystack/opentracing/spring/starter/support/TracerCustomizer.java). This will be invoked when the library attempts to build an instance of Tracer. One can see this in the [integration test](opentracing-spring-haystack-web-starter/src/test/java/com/expedia/haystack/opentracing/spring/starter/TracerCustomizerIntegrationTest.java#L29).
 
+##Deployment
+
+Update the version of repo using: 
+```
+./mvnw org.codehaus.mojo:versions-maven-plugin:2.5:set -DnewVersion=<version>-SNAPSHOT
+```
+Please don't remove snapshot from the version. The travis job is triggered when a new PR is merged in the master branch.
+Travis also updates the project version whenever a new release is tagged.
