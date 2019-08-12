@@ -109,7 +109,7 @@ opentracing:
       agent:
         enabled: true
         host: haystack-agent
-        port: 34000
+        port: 35000
 ```
 
 ### Example Project
@@ -186,7 +186,7 @@ There are other properties available to further configure the grpc agent dispatc
 
 ```properties
 opentracing.haystack.dispatchers.agent.host=haystack-agent
-opentracing.haystack.dispatchers.agent.port=34000
+opentracing.haystack.dispatchers.agent.port=35000
 opentracing.haystack.dispatchers.agent.keep-alive-time-m-s=30
 opentracing.haystack.dispatchers.agent.keep-alive-timeout-m-s=30
 opentracing.haystack.dispatchers.agent.keep-alive-without-calls=true
