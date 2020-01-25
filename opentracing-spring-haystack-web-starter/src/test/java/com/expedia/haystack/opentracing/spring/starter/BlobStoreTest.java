@@ -1,3 +1,20 @@
+/*
+ * Copyright 2020 Expedia, Inc.
+ *
+ *       Licensed under the Apache License, Version 2.0 (the "License");
+ *       you may not use this file except in compliance with the License.
+ *       You may obtain a copy of the License at
+ *
+ *           http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *       Unless required by applicable law or agreed to in writing, software
+ *       distributed under the License is distributed on an "AS IS" BASIS,
+ *       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *       See the License for the specific language governing permissions and
+ *       limitations under the License.
+ *
+ */
+
 package com.expedia.haystack.opentracing.spring.starter;
 
 import com.expedia.blobs.core.BlobStore;
@@ -6,7 +23,6 @@ import com.expedia.blobs.model.Blob;
 import com.expedia.haystack.blobs.spring.starter.Blobable;
 import com.expedia.haystack.opentracing.spring.starter.model.TestEmployee;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +112,7 @@ public class BlobStoreTest {
         final String response = testRestTemplate.getForObject("/redirect", String.class);
         Thread.sleep(500);
         final long cnt = inMemoryBlobStore.capturedBlobs.stream()
-                .filter(b -> b.getContent().toStringUtf8().contains("redirect")).count();
+                .filter(b -> b.getContent().toStringUtf8().contains(response)).count();
         assertThat(cnt).isEqualTo(0);
     }
 

@@ -54,6 +54,13 @@
         <java-version>1.8</java-version>
         <encoding>UTF-8</encoding>
 
+        <scala.major.version>2</scala.major.version>
+        <scala.minor.version>12</scala.minor.version>
+        <scala.maintenance.version>2</scala.maintenance.version>
+        <scala.major.minor.version>${scala.major.version}.${scala.minor.version}</scala.major.minor.version>
+        <scala-library.version>${scala.major.minor.version}.${scala.maintenance.version}</scala-library.version>
+        <scalatest.version>3.0.3</scalatest.version>
+
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-scalatest-plugin.version>1.0</maven-scalatest-plugin.version>
         <maven-jacoco-plugin.version>0.8.3</maven-jacoco-plugin.version>
@@ -99,6 +106,20 @@
                 <groupId>io.opentracing.contrib</groupId>
                 <artifactId>opentracing-spring-tracer-configuration-starter</artifactId>
                 <version>${opentracing-spring-tracer-configuration-starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>${scala-library.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest_${scala.major.minor.version}</artifactId>
+                <version>${scalatest.version}</version>
+                <scope>test</scope>
             </dependency>
 
         </dependencies>
