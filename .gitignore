@@ -16,3 +16,4 @@ buildNumber.properties
 *.ipr
 *.iws
 *.iml
+opentracing-spring-haystack-web-starter/blobs/

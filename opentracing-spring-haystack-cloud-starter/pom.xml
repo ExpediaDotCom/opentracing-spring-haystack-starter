@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.expedia.www</groupId>
         <artifactId>opentracing-spring-haystack-starter-parent</artifactId>
-        <version>0.2.8-SNAPSHOT</version>
+        <version>0.3.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>opentracing-spring-haystack-cloud-starter</artifactId>
@@ -15,13 +15,18 @@
     <description>Spring integration for haystack</description>
 
     <properties>
-        <opentracing-spring-cloud-starter.version>0.2.2</opentracing-spring-cloud-starter.version>
+        <opentracing-spring-cloud-starter.version>0.3.12</opentracing-spring-cloud-starter.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.expedia.www</groupId>
             <artifactId>opentracing-spring-haystack-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>haystack-spring-blobs-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -32,12 +37,11 @@
         <dependency>
             <groupId>io.opentracing.contrib</groupId>
             <artifactId>opentracing-tracerresolver</artifactId>
-            <version>0.1.5</version>
+            <version>0.1.8</version>
         </dependency>
         <dependency>
             <groupId>io.opentracing.contrib</groupId>
             <artifactId>opentracing-web-servlet-filter</artifactId>
-            <version>0.2.2</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,0 +1,108 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.expedia.www</groupId>
+        <artifactId>opentracing-spring-haystack-starter-parent</artifactId>
+        <version>0.3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>haystack-spring-blobs-starter</artifactId>
+    <packaging>jar</packaging>
+    <name>haystack-spring-blobs-starter</name>
+    <description>Spring integration for Haystack Blobs</description>
+
+    <properties>
+        <blobs.version>1.1.0</blobs.version>
+        <spring.version>5.1.3.RELEASE</spring.version>
+        <io-micrometer.version>1.1.1</io-micrometer.version>
+        <opentracing-spring-tracer-configuration-starter.version>0.3.1</opentracing-spring-tracer-configuration-starter.version>
+        <version.javax.servlet-javax.servlet-api>3.1.0</version.javax.servlet-javax.servlet-api>
+
+        <pegdown.version>1.6.0</pegdown.version>
+        <scalatest.version>3.0.3</scalatest.version>
+        <easymock.version>3.4</easymock.version>
+        <scala-maven-plugin.version>3.3.2</scala-maven-plugin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>haystack-client-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>blobs-core</artifactId>
+            <version>${blobs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>blobs-file-store</artifactId>
+            <version>${blobs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>blobs-agent-client</artifactId>
+            <version>${blobs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>haystack-blobs</artifactId>
+            <version>${blobs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>haystack-client-micrometer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-spring-tracer-configuration-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-web-servlet-filter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.1.7.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${version.javax.servlet-javax.servlet-api}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>
