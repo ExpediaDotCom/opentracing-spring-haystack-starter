@@ -17,17 +17,23 @@
 
 package com.expedia.haystack.blobs.spring.starter.filter;
 
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class BlobFilter implements Filter {
     public static final String REQUEST_BLOB_KEY = BlobFilter.class.getName() + ".request";
     public static final String RESPONSE_BLOB_KEY = BlobFilter.class.getName() + ".response";
-
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -108,24 +114,14 @@ public class BlobFilter implements Filter {
 
         public BufferedRequestWrapper(HttpServletRequest req) throws IOException {
             super(req);
-            InputStream is = req.getInputStream();
             baos = new ByteArrayOutputStream();
-            byte buf[] = new byte[1024];
-            int letti;
-            while ((letti = is.read(buf)) > 0) {
-                baos.write(buf, 0, letti);
-            }
+            IOUtils.copy(req.getInputStream(), baos);
             buffer = baos.toByteArray();
         }
 
         public ServletInputStream getInputStream() {
-            try {
-                bais = new ByteArrayInputStream(buffer);
-                bsis = new BufferedServletInputStream(bais);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
+            bais = new ByteArrayInputStream(buffer);
+            bsis = new BufferedServletInputStream(bais);
             return bsis;
         }
 
@@ -208,7 +204,6 @@ public class BlobFilter implements Filter {
 
         @Override
         public void setWriteListener(WriteListener writeListener) {
-
         }
     }
 }

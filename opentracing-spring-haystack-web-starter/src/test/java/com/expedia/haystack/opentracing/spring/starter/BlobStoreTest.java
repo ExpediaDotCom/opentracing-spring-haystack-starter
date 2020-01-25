@@ -3,6 +3,7 @@ package com.expedia.haystack.opentracing.spring.starter;
 import com.expedia.blobs.core.BlobStore;
 import com.expedia.blobs.core.BlobWriterImpl;
 import com.expedia.blobs.model.Blob;
+import com.expedia.haystack.blobs.spring.starter.Blobable;
 import com.expedia.haystack.opentracing.spring.starter.model.TestEmployee;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
@@ -14,10 +15,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
@@ -44,28 +50,54 @@ public class BlobStoreTest {
     public void blobResponseTest() throws Exception {
         final String expectedHttpResponse = "Hello, World!";
         final String response = testRestTemplate.getForObject("/helloWorld", String.class);
-        Assertions.assertThat(response).isEqualTo(expectedHttpResponse);
+        assertThat(response).isEqualTo(expectedHttpResponse);
         Thread.sleep(500);
-        assertThat(inMemoryBlobStore.helloWorldResponseBlob.getContent().toStringUtf8()).isEqualTo(expectedHttpResponse);
-        assertThat(inMemoryBlobStore.helloWorldResponseBlob.getMetadataOrDefault("content-type", ""))
-                .contains(MediaType.TEXT_PLAIN_VALUE);
+        final Blob blob = inMemoryBlobStore.capturedBlobs.stream()
+                .filter(b -> b.getContent().toStringUtf8().equalsIgnoreCase("Hello, World!"))
+                .findFirst().get();
+        assertThat(blob.getMetadataOrDefault("blob-type", "")).isEqualTo("response");
+        assertThat(blob.getMetadataOrDefault("content-type", "")).contains(MediaType.TEXT_PLAIN_VALUE);
     }
 
     @Test
     public void blobRequestTest() throws Exception {
         final TestEmployee emp = new TestEmployee("Alice");
         final ResponseEntity<TestEmployee> response = testRestTemplate.postForEntity("/post", emp, TestEmployee.class);
-        final TestEmployee requestEntity = mapper.readValue(inMemoryBlobStore.postRequestBlob.getContent().toStringUtf8(), TestEmployee.class);
-        final TestEmployee responseEntity = mapper.readValue(inMemoryBlobStore.postResponseBlob.getContent().toStringUtf8(), TestEmployee.class);
+
+        final Blob postRequestBlob = inMemoryBlobStore.capturedBlobs.stream()
+                .filter(b -> b.getContent().toStringUtf8().contains("name"))
+                .filter(b -> b.getMetadataMap().getOrDefault("blob-type", "").equals("request"))
+                .findFirst().get();
+
+        final Blob postResponseBlob = inMemoryBlobStore.capturedBlobs.stream()
+                .filter(b -> b.getContent().toStringUtf8().contains("name"))
+                .filter(b -> b.getMetadataMap().getOrDefault("blob-type", "").equals("response"))
+                .findFirst().get();
+
+        final TestEmployee requestEntity = mapper.readValue(postRequestBlob.getContent().toStringUtf8(), TestEmployee.class);
+        final TestEmployee responseEntity = mapper.readValue(postResponseBlob.getContent().toStringUtf8(), TestEmployee.class);
 
         Thread.sleep(500);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-        Assertions.assertThat(response.getBody().getName()).isEqualTo("Alice");
-        Assertions.assertThat(requestEntity.getName()).isEqualTo("Alice");
-        Assertions.assertThat(requestEntity.getId()).isEqualTo(0);
+        assertThat(response.getBody().getName()).isEqualTo("Alice");
 
-        Assertions.assertThat(responseEntity.getId()).isEqualTo(1);
-        Assertions.assertThat(responseEntity.getName()).isEqualTo("Alice");
+        assertThat(requestEntity.getName()).isEqualTo("Alice");
+        assertThat(requestEntity.getId()).isEqualTo(0);
+        assertThat(postRequestBlob.getMetadataOrDefault("content-type", "")).contains(MediaType.APPLICATION_JSON_VALUE);
+
+        assertThat(responseEntity.getId()).isEqualTo(1);
+        assertThat(responseEntity.getName()).isEqualTo("Alice");
+        assertThat(postResponseBlob.getMetadataOrDefault("content-type", "")).contains(MediaType.APPLICATION_JSON_VALUE);
+
+    }
+
+    @Test
+    public void skipBlobTest() throws Exception {
+        final String response = testRestTemplate.getForObject("/redirect", String.class);
+        Thread.sleep(500);
+        final long cnt = inMemoryBlobStore.capturedBlobs.stream()
+                .filter(b -> b.getContent().toStringUtf8().contains("redirect")).count();
+        assertThat(cnt).isEqualTo(0);
     }
 
     @TestConfiguration
@@ -74,28 +106,27 @@ public class BlobStoreTest {
         public InMemoryBlobStore blobStore() {
             return new BlobStoreTest.InMemoryBlobStore();
         }
+
+        @Bean
+        public Blobable testBlobable() {
+            return new BlobStoreTest.TestBlobale();
+        }
+    }
+
+    static class TestBlobale implements Blobable {
+        public boolean isServerReqRespValidForBlob(final HttpServletRequest req,
+                                                   final HttpServletResponse resp,
+                                                   final Throwable servletException) {
+            return resp.getStatus() != HttpStatus.PERMANENT_REDIRECT.value();
+        }
     }
 
     static class InMemoryBlobStore implements BlobStore {
-        Blob helloWorldResponseBlob;
-        Blob postRequestBlob;
-        Blob postResponseBlob;
+        final List<Blob> capturedBlobs = new ArrayList<>();
 
         @Override
         public void store(BlobWriterImpl.BlobBuilder blobBuilder) {
-            final Blob blob = blobBuilder.build();
-            final String blobContent = blob.getContent().toStringUtf8();
-            final String blobType = blob.getMetadataMap().getOrDefault("blob-type", "");
-
-            if(blobContent.contains("name")) {
-                if (blobType.equalsIgnoreCase("REQUEST")) {
-                    postRequestBlob =  blob;
-                } else {
-                    postResponseBlob = blob;
-                }
-            } else if (blobContent.contains("Hello") && blobType.equalsIgnoreCase("RESPONSE")) {
-                helloWorldResponseBlob = blob;
-            }
+            capturedBlobs.add(blobBuilder.build());
         }
 
         @Override

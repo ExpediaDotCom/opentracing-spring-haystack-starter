@@ -44,4 +44,9 @@ public class SimpleServer {
         employee.setId(1);
         return new ResponseEntity<>(employee, new HttpHeaders(), HttpStatus.OK);
     }
+
+    @GetMapping("/redirect")
+    public ResponseEntity<String> redirectRequest() {
+        return new ResponseEntity<>("redirect", new HttpHeaders(), HttpStatus.PERMANENT_REDIRECT);
+    }
 }
