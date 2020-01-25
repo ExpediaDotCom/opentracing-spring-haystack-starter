@@ -57,17 +57,18 @@ public class TracerConfigurer {
     public io.opentracing.Tracer tracer(@Value("${spring.application.name:unnamed-application}") String serviceName,
                                         final Dispatcher dispatcher,
                                         final MetricsRegistry metricsRegistry,
-                                        ObjectProvider<Collection<TracerCustomizer>> tracerCustomizersProvider) {
+                                        final ObjectProvider<Collection<TracerCustomizer>> tracerCustomizersProvider) {
         Validate.notEmpty(serviceName);
         Validate.notNull(dispatcher);
         Validate.notNull(metricsRegistry);
         Validate.notNull(tracerCustomizersProvider);
 
-        final Tracer.Builder tracerBuilder = new Tracer.Builder(metricsRegistry, serviceName, dispatcher);
+        final Tracer.Builder tracerBuilder = new Tracer.Builder(metricsRegistry, serviceName, dispatcher)
+                .withIdGenerator(new RandomUUIDGenerator());
         final Optional<Collection<TracerCustomizer>> tracerCustomizers =
                 Optional.ofNullable(tracerCustomizersProvider.getIfAvailable());
         tracerCustomizers.ifPresent(c -> c.forEach(customizer -> customizer.customize(tracerBuilder)));
-        return tracerBuilder.withIdGenerator(new RandomUUIDGenerator()).build();
+        return tracerBuilder.build();
     }
 
     @Bean

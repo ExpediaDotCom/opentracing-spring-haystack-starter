@@ -16,9 +16,15 @@
  */
 package com.expedia.haystack.opentracing.spring.starter;
 
+import com.expedia.haystack.opentracing.spring.starter.model.TestEmployee;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,5 +37,11 @@ public class SimpleServer {
     @GetMapping("/helloWorld")
     public String hello() {
         return "Hello, World!";
+    }
+
+    @PostMapping(value = "/post")
+    public ResponseEntity<TestEmployee> updateEmployeeId(@RequestBody TestEmployee employee) {
+        employee.setId(1);
+        return new ResponseEntity<>(employee, new HttpHeaders(), HttpStatus.OK);
     }
 }

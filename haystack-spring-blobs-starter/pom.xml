@@ -9,14 +9,17 @@
         <version>0.3.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>opentracing-spring-haystack-starter</artifactId>
+    <artifactId>haystack-spring-blobs-starter</artifactId>
     <packaging>jar</packaging>
-    <name>opentracing-spring-haystack-starter</name>
-    <description>Spring integration for haystack</description>
+    <name>haystack-spring-blobs-starter</name>
+    <description>Spring integration for Haystack Blobs</description>
 
     <properties>
+        <blobs.version>1.1.0</blobs.version>
         <spring.version>5.1.3.RELEASE</spring.version>
         <io-micrometer.version>1.1.1</io-micrometer.version>
+        <opentracing-spring-tracer-configuration-starter.version>0.3.1</opentracing-spring-tracer-configuration-starter.version>
+        <version.javax.servlet-javax.servlet-api>3.1.0</version.javax.servlet-javax.servlet-api>
 
         <scala.major.version>2</scala.major.version>
         <scala.minor.version>12</scala.minor.version>
@@ -38,6 +41,30 @@
 
         <dependency>
             <groupId>com.expedia.www</groupId>
+            <artifactId>blobs-core</artifactId>
+            <version>${blobs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>blobs-file-store</artifactId>
+            <version>${blobs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>blobs-agent-client</artifactId>
+            <version>${blobs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.expedia.www</groupId>
+            <artifactId>haystack-blobs</artifactId>
+            <version>${blobs.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.expedia.www</groupId>
             <artifactId>haystack-client-micrometer</artifactId>
         </dependency>
 
@@ -46,7 +73,7 @@
             <artifactId>micrometer-core</artifactId>
             <version>${io-micrometer.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -56,7 +83,31 @@
             <groupId>io.opentracing.contrib</groupId>
             <artifactId>opentracing-spring-tracer-configuration-starter</artifactId>
         </dependency>
-        
+
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-web-servlet-filter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.1.7.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${version.javax.servlet-javax.servlet-api}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>

@@ -6,11 +6,18 @@
 
     <groupId>com.expedia.www</groupId>
     <artifactId>opentracing-spring-haystack-starter-parent</artifactId>
-    <version>0.2.8-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Opentracing Spring Haystack Stater Parent POM</name>
     <description>Opentracing Spring Haystack Stater Parent POM</description>
     <url>https://github.com/ExpediaDotCom/opentracing-spring-haystack-starter</url>
+
+    <modules>
+        <module>haystack-spring-blobs-starter</module>
+        <module>opentracing-spring-haystack-starter</module>
+        <module>opentracing-spring-haystack-web-starter</module>
+        <module>opentracing-spring-haystack-cloud-starter</module>
+    </modules>
 
     <scm>
         <connection>scm:git:git://github.com/ExpediaDotCom/opentracing-spring-haystack-starter.git</connection>
@@ -39,9 +46,11 @@
     </licenses>
 
     <properties>
-        <haystack-client-java.version>0.2.8</haystack-client-java.version>
+        <haystack-client-java.version>0.3.0</haystack-client-java.version>
         <slf4j.version>1.7.25</slf4j.version>
-
+        <opentracing-spring-tracer-configuration-starter.version>0.3.1</opentracing-spring-tracer-configuration-starter.version>
+        <opentracing-web-servlet-filter.version>0.4.0</opentracing-web-servlet-filter.version>
+        <opentracing-java-spring-web.version>3.0.1</opentracing-java-spring-web.version>
         <java-version>1.8</java-version>
         <encoding>UTF-8</encoding>
 
@@ -74,6 +83,24 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-web-servlet-filter</artifactId>
+                <version>${opentracing-web-servlet-filter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-spring-web</artifactId>
+                <version>${opentracing-java-spring-web.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-spring-tracer-configuration-starter</artifactId>
+                <version>${opentracing-spring-tracer-configuration-starter.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -226,10 +253,4 @@
             </build>
         </profile>
     </profiles>
-
-    <modules>
-        <module>opentracing-spring-haystack-starter</module>
-        <module>opentracing-spring-haystack-web-starter</module>
-        <module>opentracing-spring-haystack-cloud-starter</module>
-    </modules>
 </project>
