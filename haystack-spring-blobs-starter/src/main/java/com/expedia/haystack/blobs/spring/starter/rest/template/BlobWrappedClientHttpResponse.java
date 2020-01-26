@@ -15,7 +15,7 @@
  *
  */
 
-package com.expedia.haystack.blobs.spring.starter.model;
+package com.expedia.haystack.blobs.spring.starter.rest.template;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;

@@ -115,7 +115,7 @@ public class BlobStoreTest {
         Thread.sleep(500);
         final long cnt = inMemoryBlobStore.capturedBlobs.stream()
                 .filter(b -> b.getContent().toStringUtf8().contains(response)).count();
-        assertThat(cnt).isEqualTo(1);
+        assertThat(cnt).isEqualTo(0);
     }
 
     @TestConfiguration
@@ -141,7 +141,7 @@ public class BlobStoreTest {
         public boolean isClientReqRespValidForBlob(final HttpRequest req,
                                             @Nullable final ClientHttpResponse resp,
                                             @Nullable final Throwable throwable) {
-            return true;
+            return false;
         }
     }
 

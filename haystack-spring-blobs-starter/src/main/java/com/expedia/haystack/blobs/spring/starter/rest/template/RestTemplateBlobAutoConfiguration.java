@@ -1,6 +1,5 @@
 package com.expedia.haystack.blobs.spring.starter.rest.template;
 
-
 import com.expedia.haystack.blobs.spring.starter.BlobSettings;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.spring.web.client.TracingAsyncRestTemplateInterceptor;

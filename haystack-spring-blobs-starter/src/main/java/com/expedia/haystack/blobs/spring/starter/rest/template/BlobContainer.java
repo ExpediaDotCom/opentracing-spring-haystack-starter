@@ -15,7 +15,7 @@
  *
  */
 
-package com.expedia.haystack.blobs.spring.starter.model;
+package com.expedia.haystack.blobs.spring.starter.rest.template;
 
 public interface BlobContainer {
     byte[] getResponse();

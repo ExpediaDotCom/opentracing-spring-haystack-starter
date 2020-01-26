@@ -6,7 +6,7 @@ import com.expedia.blobs.core.BlobWriter;
 import com.expedia.blobs.core.BlobsFactory;
 import com.expedia.haystack.blobs.SpanBlobContext;
 import com.expedia.haystack.blobs.spring.starter.Blobable;
-import com.expedia.haystack.blobs.spring.starter.model.BlobContainer;
+import com.expedia.haystack.blobs.spring.starter.rest.template.BlobContainer;
 import com.expedia.haystack.blobs.spring.starter.model.BlobContent;
 import com.expedia.haystack.blobs.spring.starter.utils.BlobWriteHelper;
 import io.opentracing.Span;

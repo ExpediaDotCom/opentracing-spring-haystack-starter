@@ -1,6 +1,5 @@
 package com.expedia.haystack.blobs.spring.starter.rest.template;
 
-import com.expedia.haystack.blobs.spring.starter.model.BlobWrappedClientHttpResponse;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;

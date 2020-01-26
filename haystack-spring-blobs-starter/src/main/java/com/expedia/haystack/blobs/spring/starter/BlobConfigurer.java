@@ -24,7 +24,9 @@ import com.expedia.blobs.core.predicates.BlobsRateLimiter;
 import com.expedia.haystack.blobs.spring.starter.decorators.ClientRequestBlobDecorator;
 import com.expedia.haystack.blobs.spring.starter.decorators.ServerRequestBlobDecorator;
 import com.expedia.haystack.blobs.spring.starter.filter.BlobFilter;
+import io.opentracing.contrib.spring.web.client.RestTemplateSpanDecorator;
 import io.opentracing.contrib.web.servlet.filter.ServletFilterSpanDecorator;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -42,6 +44,7 @@ import java.util.function.Predicate;
 public class BlobConfigurer {
 
     @Bean
+    @ConditionalOnClass(RestTemplateSpanDecorator.class)
     public ClientRequestBlobDecorator clientBlobDecorator(BlobsFactory<BlobContext> factory, Blobable blobable) {
         return new ClientRequestBlobDecorator(factory, blobable);
     }
