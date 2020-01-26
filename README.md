@@ -294,7 +294,6 @@ haystack:
     port: 35001
 ```
 
-If one wants to blob conditionally based on certain properties on request/response, then one needs to implement the Blobable interface. 
-For instance, one can control to blob only if there is a http failure. Check the BlobStoreTest example for quick reference. 
-Please note, today the integration supports the blob(req+resp) feature only on the server interaction. 
-If your service talks to downstream systems, and you want to capture the blobs in the client span, then you need to invoke the blob api in the code yourself.
+If one wants to blob conditionally based on certain properties on request/response, then one needs to implement the [Blobable](./haystack-spring-blobs-starter/src/main/java/com/expedia/haystack/blobs/spring/starter/Blobable.java) interface. 
+For instance, one can control to blob only if there is a http failure. Check the [BlobStoreTest](./opentracing-spring-haystack-web-starter/src/test/java/com/expedia/haystack/opentracing/spring/starter/BlobStoreTest.java) example for quick reference. 
+Please note, the blobs integration works both for client and server side span. 

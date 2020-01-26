@@ -15,8 +15,9 @@
  *
  */
 
-package com.expedia.haystack.blobs.spring.starter.rest.template;
+package com.expedia.haystack.blobs.spring.starter.rest.template.interceptor;
 
+import com.expedia.haystack.blobs.spring.starter.rest.template.BlobContainer;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
