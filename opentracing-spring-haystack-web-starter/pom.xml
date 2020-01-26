@@ -28,7 +28,6 @@
         <dependency>
             <groupId>io.opentracing.contrib</groupId>
             <artifactId>opentracing-spring-web-starter</artifactId>
-            <version>3.0.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework</groupId>

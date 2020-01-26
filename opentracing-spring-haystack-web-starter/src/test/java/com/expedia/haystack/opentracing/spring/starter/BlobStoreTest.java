@@ -31,11 +31,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -104,7 +107,6 @@ public class BlobStoreTest {
         assertThat(responseEntity.getId()).isEqualTo(1);
         assertThat(responseEntity.getName()).isEqualTo("Alice");
         assertThat(postResponseBlob.getMetadataOrDefault("content-type", "")).contains(MediaType.APPLICATION_JSON_VALUE);
-
     }
 
     @Test
@@ -113,7 +115,7 @@ public class BlobStoreTest {
         Thread.sleep(500);
         final long cnt = inMemoryBlobStore.capturedBlobs.stream()
                 .filter(b -> b.getContent().toStringUtf8().contains(response)).count();
-        assertThat(cnt).isEqualTo(0);
+        assertThat(cnt).isEqualTo(1);
     }
 
     @TestConfiguration
@@ -134,6 +136,12 @@ public class BlobStoreTest {
                                                    final HttpServletResponse resp,
                                                    final Throwable servletException) {
             return resp.getStatus() != HttpStatus.PERMANENT_REDIRECT.value();
+        }
+
+        public boolean isClientReqRespValidForBlob(final HttpRequest req,
+                                            @Nullable final ClientHttpResponse resp,
+                                            @Nullable final Throwable throwable) {
+            return true;
         }
     }
 
