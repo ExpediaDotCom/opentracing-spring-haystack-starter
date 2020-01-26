@@ -25,6 +25,7 @@ Table of Contents
          * [Metrics](#metrics)
          * [Customizing Tracer](#customizing-tracer)
    * [Deployment](#deployment)
+   * [Blob Integration](#blob)
 
 
 ## Instrumenting Spring Boot or Spring Web applications
@@ -270,7 +271,7 @@ Please don't remove snapshot from the version. The travis job is triggered when 
 Travis also updates the project version whenever a new release is tagged.
 
 
-#### Blob
+## Blob
 One can turn on the blob feature that writes the request+response payload in distributed file-system and also adds a span tag to dereference the store location. 
 For more information, read [here](https://github.com/ExpediaDotCom/blobs). One can also use [haystack-agent](https://github.com/ExpediaDotCom/haystack-agent) as a blob forwarder to distributed file systems like AWS/S3.
 

@@ -6,16 +6,19 @@ import com.expedia.blobs.core.BlobWriter;
 import com.expedia.blobs.core.BlobsFactory;
 import com.expedia.haystack.blobs.SpanBlobContext;
 import com.expedia.haystack.blobs.spring.starter.Blobable;
-import com.expedia.haystack.blobs.spring.starter.rest.template.BlobContainer;
 import com.expedia.haystack.blobs.spring.starter.model.BlobContent;
+import com.expedia.haystack.blobs.spring.starter.rest.template.BlobContainer;
 import com.expedia.haystack.blobs.spring.starter.utils.BlobWriteHelper;
 import io.opentracing.Span;
 import io.opentracing.contrib.spring.web.client.RestTemplateSpanDecorator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 
 public class ClientRequestBlobDecorator implements RestTemplateSpanDecorator {
+    private final static Logger log = LoggerFactory.getLogger(ClientRequestBlobDecorator.class);
 
     private final BlobsFactory<BlobContext> factory;
     private final Blobable blobable;
@@ -54,8 +57,11 @@ public class ClientRequestBlobDecorator implements RestTemplateSpanDecorator {
 
             final BlobContainer container = (BlobContainer)httpResponse;
             final SpanBlobContext blobContext = new SpanBlobContext((com.expedia.www.haystack.client.Span) span);
-            write(container.getRequest(), blobContext, BlobType.REQUEST, MediaType.ALL_VALUE);
+            /* what is better way for getting the content-type for request? default to application/octet-stream */
+            write(container.getRequest(), blobContext, BlobType.REQUEST, MediaType.APPLICATION_OCTET_STREAM_VALUE);
             write(container.getResponse(), blobContext, BlobType.RESPONSE, httpResponse.getHeaders().getContentType().getType());
+        } else {
+            log.debug("skip blob logging for client's request/response as condition has failed");
         }
     }
 

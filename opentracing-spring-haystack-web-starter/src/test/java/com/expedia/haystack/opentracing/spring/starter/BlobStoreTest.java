@@ -139,8 +139,8 @@ public class BlobStoreTest {
         }
 
         public boolean isClientReqRespValidForBlob(final HttpRequest req,
-                                            @Nullable final ClientHttpResponse resp,
-                                            @Nullable final Throwable throwable) {
+                                                   @Nullable final ClientHttpResponse resp,
+                                                   @Nullable final Throwable throwable) {
             return false;
         }
     }

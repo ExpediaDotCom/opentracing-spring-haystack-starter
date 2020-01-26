@@ -49,7 +49,7 @@ public class ServerRequestBlobDecorator implements ServletFilterSpanDecorator {
     }
 
     private void doBlob(HttpServletRequest servletReq, HttpServletResponse servletResponse, Throwable throwable, Span span) {
-        if(blobable.isServerReqRespValidForBlob(servletReq, servletResponse, throwable)) {
+        if (blobable.isServerReqRespValidForBlob(servletReq, servletResponse, throwable)) {
             final SpanBlobContext blobContext = new SpanBlobContext((com.expedia.www.haystack.client.Span) span);
 
             final Object requestBytes = servletReq.getAttribute(BlobFilter.REQUEST_BLOB_KEY);
@@ -57,11 +57,13 @@ public class ServerRequestBlobDecorator implements ServletFilterSpanDecorator {
 
             final Object responseBytes = servletReq.getAttribute(BlobFilter.RESPONSE_BLOB_KEY);
             write(responseBytes, blobContext, BlobType.RESPONSE, servletResponse.getContentType());
+        } else {
+            log.debug("skip blob logging for server request/response as blob condition has failed");
         }
     }
 
     private void write(Object data, SpanBlobContext blobContext, BlobType blobType, String contentType) {
-        if(data instanceof byte[]) {
+        if (data instanceof byte[]) {
             final BlobWriter writer = factory.create(blobContext);
             final BlobContent blob = new BlobContent((byte[]) data, contentType, blobType);
             BlobWriteHelper.writeBlob(writer, blob);

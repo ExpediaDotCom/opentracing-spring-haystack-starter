@@ -22,14 +22,28 @@ import org.springframework.http.client.AsyncClientHttpRequestExecution;
 import org.springframework.http.client.AsyncClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureAdapter;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class BlobAsyncRestTemplateInterceptor implements AsyncClientHttpRequestInterceptor {
     @Override
-    public ListenableFuture<ClientHttpResponse> intercept(HttpRequest httpRequest,
-                                                          byte[] bytes,
-                                                          AsyncClientHttpRequestExecution asyncClientHttpRequestExecution) throws IOException {
-        return null;
+    public ListenableFuture<ClientHttpResponse> intercept(final HttpRequest httpRequest,
+                                                          final byte[] body,
+                                                          final AsyncClientHttpRequestExecution execution)
+            throws IOException {
+
+        final ListenableFuture<ClientHttpResponse> future = execution.executeAsync(httpRequest, body);
+        return new ListenableFutureAdapter<ClientHttpResponse, ClientHttpResponse>(future) {
+            @Override
+            protected BlobWrappedClientHttpResponse adapt(final ClientHttpResponse httpResponse) throws ExecutionException {
+                try {
+                    return new BlobWrappedClientHttpResponse(body, httpResponse);
+                } catch (IOException e) {
+                    throw new ExecutionException(e);
+                }
+            }
+        };
     }
 }
