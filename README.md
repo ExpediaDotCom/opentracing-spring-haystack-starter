@@ -25,6 +25,7 @@ Table of Contents
          * [Metrics](#metrics)
          * [Customizing Tracer](#customizing-tracer)
    * [Deployment](#deployment)
+   * [Blob Integration](#blob)
 
 
 ## Instrumenting Spring Boot or Spring Web applications
@@ -270,7 +271,7 @@ Please don't remove snapshot from the version. The travis job is triggered when 
 Travis also updates the project version whenever a new release is tagged.
 
 
-#### Blob
+## Blob
 One can turn on the blob feature that writes the request+response payload in distributed file-system and also adds a span tag to dereference the store location. 
 For more information, read [here](https://github.com/ExpediaDotCom/blobs). One can also use [haystack-agent](https://github.com/ExpediaDotCom/haystack-agent) as a blob forwarder to distributed file systems like AWS/S3.
 
@@ -294,7 +295,6 @@ haystack:
     port: 35001
 ```
 
-If one wants to blob conditionally based on certain properties on request/response, then one needs to implement the Blobable interface. 
-For instance, one can control to blob only if there is a http failure. Check the BlobStoreTest example for quick reference. 
-Please note, today the integration supports the blob(req+resp) feature only on the server interaction. 
-If your service talks to downstream systems, and you want to capture the blobs in the client span, then you need to invoke the blob api in the code yourself.
+If one wants to blob conditionally based on certain properties on request/response, then one needs to implement the [Blobable](./haystack-spring-blobs-starter/src/main/java/com/expedia/haystack/blobs/spring/starter/Blobable.java) interface. 
+For instance, one can control to blob only if there is a http failure. Check the [BlobStoreTest](./opentracing-spring-haystack-web-starter/src/test/java/com/expedia/haystack/opentracing/spring/starter/BlobStoreTest.java) example for quick reference. 
+Please note, the blobs integration works both for client and server side span. 

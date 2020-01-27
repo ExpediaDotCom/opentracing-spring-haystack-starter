@@ -17,6 +17,10 @@
 
 package com.expedia.haystack.blobs.spring.starter;
 
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.ClientHttpResponse;
+
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,7 +38,13 @@ public interface Blobable {
      */
     default boolean isServerReqRespValidForBlob(final HttpServletRequest req,
                                                 final HttpServletResponse resp,
-                                                final Throwable servletException) {
+                                                @Nullable final Throwable servletException) {
+        return true;
+    }
+
+    default boolean isClientReqRespValidForBlob(final HttpRequest req,
+                                                @Nullable final ClientHttpResponse resp,
+                                                @Nullable final Throwable throwable) {
         return true;
     }
 }

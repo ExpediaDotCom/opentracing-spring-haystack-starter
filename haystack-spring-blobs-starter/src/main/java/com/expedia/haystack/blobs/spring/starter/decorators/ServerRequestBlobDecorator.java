@@ -1,3 +1,20 @@
+/*
+ * Copyright 2020 Expedia, Inc.
+ *
+ *       Licensed under the Apache License, Version 2.0 (the "License");
+ *       you may not use this file except in compliance with the License.
+ *       You may obtain a copy of the License at
+ *
+ *           http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *       Unless required by applicable law or agreed to in writing, software
+ *       distributed under the License is distributed on an "AS IS" BASIS,
+ *       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *       See the License for the specific language governing permissions and
+ *       limitations under the License.
+ *
+ */
+
 package com.expedia.haystack.blobs.spring.starter.decorators;
 
 import com.expedia.blobs.core.BlobContext;
@@ -49,7 +66,7 @@ public class ServerRequestBlobDecorator implements ServletFilterSpanDecorator {
     }
 
     private void doBlob(HttpServletRequest servletReq, HttpServletResponse servletResponse, Throwable throwable, Span span) {
-        if(blobable.isServerReqRespValidForBlob(servletReq, servletResponse, throwable)) {
+        if (blobable.isServerReqRespValidForBlob(servletReq, servletResponse, throwable)) {
             final SpanBlobContext blobContext = new SpanBlobContext((com.expedia.www.haystack.client.Span) span);
 
             final Object requestBytes = servletReq.getAttribute(BlobFilter.REQUEST_BLOB_KEY);
@@ -57,11 +74,13 @@ public class ServerRequestBlobDecorator implements ServletFilterSpanDecorator {
 
             final Object responseBytes = servletReq.getAttribute(BlobFilter.RESPONSE_BLOB_KEY);
             write(responseBytes, blobContext, BlobType.RESPONSE, servletResponse.getContentType());
+        } else {
+            log.debug("skip blob logging for server request/response as blob condition has failed");
         }
     }
 
     private void write(Object data, SpanBlobContext blobContext, BlobType blobType, String contentType) {
-        if(data instanceof byte[]) {
+        if (data instanceof byte[]) {
             final BlobWriter writer = factory.create(blobContext);
             final BlobContent blob = new BlobContent((byte[]) data, contentType, blobType);
             BlobWriteHelper.writeBlob(writer, blob);

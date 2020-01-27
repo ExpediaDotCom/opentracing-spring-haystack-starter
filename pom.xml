@@ -51,6 +51,7 @@
         <opentracing-spring-tracer-configuration-starter.version>0.3.1</opentracing-spring-tracer-configuration-starter.version>
         <opentracing-web-servlet-filter.version>0.4.0</opentracing-web-servlet-filter.version>
         <opentracing-java-spring-web.version>3.0.1</opentracing-java-spring-web.version>
+        <opentracing-spring-web-starter.version>3.0.0</opentracing-spring-web-starter.version>
         <java-version>1.8</java-version>
         <encoding>UTF-8</encoding>
 
@@ -90,6 +91,13 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-spring-web-starter</artifactId>
+                <version>${opentracing-spring-web-starter.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.opentracing.contrib</groupId>
                 <artifactId>opentracing-web-servlet-filter</artifactId>

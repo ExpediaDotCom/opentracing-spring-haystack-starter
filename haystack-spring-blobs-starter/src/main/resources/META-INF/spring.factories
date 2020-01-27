@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.expedia.haystack.blobs.spring.starter.BlobConfigurer
-
+com.expedia.haystack.blobs.spring.starter.BlobConfigurer,\
+com.expedia.haystack.blobs.spring.starter.rest.template.RestTemplateBlobAutoConfiguration
