@@ -34,6 +34,9 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 
+import java.util.Collections;
+import java.util.Map;
+
 public class ClientRequestBlobDecorator implements RestTemplateSpanDecorator {
     private final static Logger log = LoggerFactory.getLogger(ClientRequestBlobDecorator.class);
 
@@ -74,17 +77,29 @@ public class ClientRequestBlobDecorator implements RestTemplateSpanDecorator {
 
             final BlobContainer container = (BlobContainer)httpResponse;
             final SpanBlobContext blobContext = new SpanBlobContext((com.expedia.www.haystack.client.Span) span);
+
             /* what is better way for getting the content-type for request? default to application/octet-stream */
-            write(container.getRequest(), blobContext, BlobType.REQUEST, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-            write(container.getResponse(), blobContext, BlobType.RESPONSE, httpResponse.getHeaders().getContentType().getType());
+            write(container.getRequest(),
+                    blobContext,
+                    BlobType.REQUEST,
+                    MediaType.APPLICATION_OCTET_STREAM_VALUE,
+                    Collections.emptyMap());
+            write(container.getResponse(),
+                    blobContext, BlobType.RESPONSE,
+                    httpResponse.getHeaders().getContentType().getType(),
+                    Collections.emptyMap());
         } else {
             log.debug("skip blob logging for client's request/response as condition has failed");
         }
     }
 
-    private void write(byte[] data, SpanBlobContext blobContext, BlobType blobType, String contentType) {
+    private void write(final byte[] data,
+                       final SpanBlobContext blobContext,
+                       final BlobType blobType,
+                       final String contentType,
+                       final Map<String, String> metadata) {
         final BlobWriter writer = factory.create(blobContext);
         final BlobContent blob = new BlobContent(data, contentType, blobType);
-        BlobWriteHelper.writeBlob(writer, blob);
+        BlobWriteHelper.writeBlob(writer, blob, metadata);
     }
 }

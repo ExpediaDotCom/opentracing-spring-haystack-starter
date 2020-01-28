@@ -19,9 +19,9 @@ package com.expedia.haystack.blobs.spring.starter.rest.template;
 
 import com.expedia.haystack.blobs.spring.starter.BlobSettings;
 import com.expedia.haystack.blobs.spring.starter.rest.template.interceptor.BlobAsyncRestTemplateInterceptor;
+import com.expedia.haystack.blobs.spring.starter.rest.template.interceptor.BlobRestTemplateInterceptor;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.spring.web.client.TracingAsyncRestTemplateInterceptor;
-import io.opentracing.contrib.spring.web.client.TracingRestTemplateInterceptor;
 import io.opentracing.contrib.spring.web.starter.RestTemplateTracingAutoConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -118,7 +118,7 @@ public class RestTemplateBlobAutoConfiguration {
     }
 
     /**
-     * Provides {@link BlobRestTemplateCustomizer} bean, which adds {@link TracingRestTemplateInterceptor}
+     * Provides {@link BlobRestTemplateCustomizer} bean, which adds {@link BlobRestTemplateInterceptor}
      * into default {@link RestTemplateBuilder} bean.
      * <p>
      * Supported only with Spring Boot.

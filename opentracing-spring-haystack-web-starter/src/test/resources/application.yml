@@ -1,3 +1,4 @@
 haystack:
   blobs:
     enabled: true
+    skipPattern: "/skip"

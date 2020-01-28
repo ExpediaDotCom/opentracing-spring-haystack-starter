@@ -56,6 +56,11 @@ public class SimpleServer {
         return new ResponseEntity<>("redirect", new HttpHeaders(), HttpStatus.PERMANENT_REDIRECT);
     }
 
+    @GetMapping("/skip")
+    public String skipBlob() {
+        return "Skip Blob Feature";
+    }
+
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();

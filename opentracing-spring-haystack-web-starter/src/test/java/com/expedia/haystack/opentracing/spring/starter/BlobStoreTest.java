@@ -72,7 +72,7 @@ public class BlobStoreTest {
         assertThat(response).isEqualTo(expectedHttpResponse);
         Thread.sleep(500);
         final Blob blob = inMemoryBlobStore.capturedBlobs.stream()
-                .filter(b -> b.getContent().toStringUtf8().equalsIgnoreCase("Hello, World!"))
+                .filter(b -> b.getContent().toStringUtf8().equalsIgnoreCase(expectedHttpResponse))
                 .findFirst().get();
         assertThat(blob.getMetadataOrDefault("blob-type", "")).isEqualTo("response");
         assertThat(blob.getMetadataOrDefault("content-type", "")).contains(MediaType.TEXT_PLAIN_VALUE);
@@ -110,8 +110,17 @@ public class BlobStoreTest {
     }
 
     @Test
-    public void skipBlobTest() throws Exception {
+    public void skipBlobTest_1() throws Exception {
         final String response = testRestTemplate.getForObject("/redirect", String.class);
+        Thread.sleep(500);
+        final long cnt = inMemoryBlobStore.capturedBlobs.stream()
+                .filter(b -> b.getContent().toStringUtf8().contains(response)).count();
+        assertThat(cnt).isEqualTo(0);
+    }
+
+    @Test
+    public void skipBlobTest_2() throws Exception {
+        final String response = testRestTemplate.getForObject("/skip", String.class);
         Thread.sleep(500);
         final long cnt = inMemoryBlobStore.capturedBlobs.stream()
                 .filter(b -> b.getContent().toStringUtf8().contains(response)).count();
