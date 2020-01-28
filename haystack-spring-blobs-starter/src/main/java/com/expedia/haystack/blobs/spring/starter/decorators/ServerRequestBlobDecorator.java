@@ -33,7 +33,11 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
+
+import static org.springframework.http.HttpHeaders.CONTENT_ENCODING;
 
 public class ServerRequestBlobDecorator implements ServletFilterSpanDecorator {
     private final static Logger log = LoggerFactory.getLogger(ServerRequestBlobDecorator.class);
@@ -70,20 +74,29 @@ public class ServerRequestBlobDecorator implements ServletFilterSpanDecorator {
             final SpanBlobContext blobContext = new SpanBlobContext((com.expedia.www.haystack.client.Span) span);
 
             final Object requestBytes = servletReq.getAttribute(BlobFilter.REQUEST_BLOB_KEY);
-            write(requestBytes, blobContext, BlobType.REQUEST, servletReq.getContentType());
+
+            final Map<String, String> reqMetadata = servletReq.getHeader(CONTENT_ENCODING) != null ?
+                    Collections.singletonMap(CONTENT_ENCODING, servletReq.getHeader(CONTENT_ENCODING)) : Collections.emptyMap();
+            write(requestBytes, blobContext, BlobType.REQUEST, servletReq.getContentType(), reqMetadata);
 
             final Object responseBytes = servletReq.getAttribute(BlobFilter.RESPONSE_BLOB_KEY);
-            write(responseBytes, blobContext, BlobType.RESPONSE, servletResponse.getContentType());
+            final Map<String, String> respMetadata = servletResponse.getHeader(CONTENT_ENCODING) != null ?
+                    Collections.singletonMap(CONTENT_ENCODING, servletResponse.getHeader(CONTENT_ENCODING)) : Collections.emptyMap();
+            write(responseBytes, blobContext, BlobType.RESPONSE, servletResponse.getContentType(), respMetadata);
         } else {
             log.debug("skip blob logging for server request/response as blob condition has failed");
         }
     }
 
-    private void write(Object data, SpanBlobContext blobContext, BlobType blobType, String contentType) {
-        if (data instanceof byte[]) {
+    private void write(final Object data,
+                       final SpanBlobContext blobContext,
+                       final BlobType blobType,
+                       final String contentType,
+                       final Map<String, String> metadata) {
+        if (data != null && data instanceof byte[]) {
             final BlobWriter writer = factory.create(blobContext);
             final BlobContent blob = new BlobContent((byte[]) data, contentType, blobType);
-            BlobWriteHelper.writeBlob(writer, blob);
+            BlobWriteHelper.writeBlob(writer, blob, metadata);
         } else {
             log.error("Fail to write server {} as blob in the span", blobType.getType());
         }

@@ -39,7 +39,7 @@ public class BlobRestTemplateCustomizer implements RestTemplateCustomizer {
     void addInterceptor(InterceptingHttpAccessor restTemplate) {
         List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();
 
-        for (ClientHttpRequestInterceptor interceptor : interceptors) {
+        for (final ClientHttpRequestInterceptor interceptor : interceptors) {
             if (interceptor instanceof BlobRestTemplateInterceptor) {
                 return;
             }

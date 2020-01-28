@@ -72,7 +72,7 @@ public class BlobStoreTest {
         assertThat(response).isEqualTo(expectedHttpResponse);
         Thread.sleep(500);
         final Blob blob = inMemoryBlobStore.capturedBlobs.stream()
-                .filter(b -> b.getContent().toStringUtf8().equalsIgnoreCase("Hello, World!"))
+                .filter(b -> b.getContent().toStringUtf8().equalsIgnoreCase(expectedHttpResponse))
                 .findFirst().get();
         assertThat(blob.getMetadataOrDefault("blob-type", "")).isEqualTo("response");
         assertThat(blob.getMetadataOrDefault("content-type", "")).contains(MediaType.TEXT_PLAIN_VALUE);

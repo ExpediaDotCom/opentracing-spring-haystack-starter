@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class BlobFilter implements Filter {
+    private final static Logger log = LoggerFactory.getLogger(BlobFilter.class);
     public static final String REQUEST_BLOB_KEY = BlobFilter.class.getName() + ".request";
     public static final String RESPONSE_BLOB_KEY = BlobFilter.class.getName() + ".response";
 
@@ -43,6 +44,7 @@ public class BlobFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
             throws IOException, ServletException {
 
+        log.debug("Adding " + BlobFilter.class.getSimpleName() + " to server filters");
         final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         final HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
 

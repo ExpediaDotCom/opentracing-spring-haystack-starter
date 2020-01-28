@@ -23,12 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class BlobWriteHelper {
     private final static Logger LOGGER = LoggerFactory.getLogger(BlobWriteHelper.class);
 
     public static void writeBlob(final BlobWriter blobWriter,
-                                 final BlobContent blob) {
+                                 final BlobContent blob,
+                                 final Map<String, String> metadata) {
         blobWriter.write(
                 blob.getBlobType(),
                 blob.getContentType(),
@@ -39,7 +41,8 @@ public class BlobWriteHelper {
                         LOGGER.error("Exception occurred while writing data to stream for preparing blob", e);
                     }
                 },
-                metadata -> {
+                md -> {
+                    metadata.forEach(md::add);
                 }
         );
     }

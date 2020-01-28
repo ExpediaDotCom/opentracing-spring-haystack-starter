@@ -29,29 +29,48 @@ public class BlobSettings {
     private Store store = new Store();
     private boolean enabled = true;
     private double ratePerSec = -1;
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-    public void setStore(Store store) {
-        this.store = store;
-    }
-    public void setRatePerSec(double ratePerSec) {
-        this.ratePerSec = ratePerSec;
-    }
+    private String urlPattern = "/*";
+    private int filterLevel = Integer.MIN_VALUE + 1;
 
     public boolean isEnabled() {
         return enabled;
     }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
     public Store getStore() {
         return store;
+    }
+
+    public void setRatePerSec(double ratePerSec) {
+        this.ratePerSec = ratePerSec;
     }
     public double getRatePerSec() {
         return ratePerSec;
     }
 
+    public String getUrlPattern() {
+        return urlPattern;
+    }
+    public void setUrlPattern(String urlPattern) {
+        this.urlPattern = urlPattern;
+    }
+
+    public void setFilterLevel(int filterLevel) {
+        this.filterLevel = filterLevel;
+    }
+
+    public int getFilterLevel() {
+        return filterLevel;
+    }
+
     public static class Store {
         private String name = "file";
+        private String directory;
         private String host = "haystack-agent";
         private int port = 35001;
         public void setName(String name) {
@@ -64,6 +83,13 @@ public class BlobSettings {
             this.port = port;
         }
 
+
+        public String getDirectory() {
+            return directory;
+        }
+        public void setDirectory(String directory) {
+            this.directory = directory;
+        }
         public String getName() {
             return name;
         }
@@ -79,9 +105,10 @@ public class BlobSettings {
         final BlobSettings.Store store = settings.getStore();
         switch (store.getName().toLowerCase()) {
             case "file": {
-                String userDirectory = System.getProperty("user.dir");
-                String directoryPath = userDirectory.concat("/blobs");
-                File directory = new File(directoryPath);
+                final String dir =
+                        (store.getDirectory() == null || store.getDirectory().isEmpty()) ?
+                                System.getProperty("user.dir").concat("/blobs") : store.getDirectory();
+                final File directory = new File(dir);
                 if (!directory.exists()) {
                     directory.mkdir();
                 }
