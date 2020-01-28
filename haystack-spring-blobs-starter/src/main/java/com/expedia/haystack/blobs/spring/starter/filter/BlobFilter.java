@@ -30,23 +30,37 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Pattern;
+
+import static io.opentracing.contrib.web.servlet.filter.TracingFilter.SERVER_SPAN_CONTEXT;
 
 public class BlobFilter implements Filter {
     private final static Logger log = LoggerFactory.getLogger(BlobFilter.class);
     public static final String REQUEST_BLOB_KEY = BlobFilter.class.getName() + ".request";
     public static final String RESPONSE_BLOB_KEY = BlobFilter.class.getName() + ".response";
+    private final Pattern skipPattern;
+
+    public BlobFilter(final String skipPattern) {
+        this.skipPattern = skipPattern == null || skipPattern.isEmpty() ? null : Pattern.compile(skipPattern);
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        log.debug("Adding " + BlobFilter.class.getSimpleName() + " to server filters");
     }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
             throws IOException, ServletException {
 
-        log.debug("Adding " + BlobFilter.class.getSimpleName() + " to server filters");
         final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         final HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+
+        /* no need to extract req/resp if trace is not enabled for this http request*/
+        if (!isTraced(httpRequest) || shouldSkip(httpRequest)) {
+            chain.doFilter(servletRequest, servletResponse);
+            return;
+        }
 
         final BufferedRequestWrapper bufferedRequest = new BufferedRequestWrapper(httpRequest);
 
@@ -57,6 +71,7 @@ public class BlobFilter implements Filter {
             public PrintWriter getWriter() {
                 return pw.getWriter();
             }
+
             public ServletOutputStream getOutputStream() {
                 return pw.getStream();
             }
@@ -94,6 +109,12 @@ public class BlobFilter implements Filter {
         }
     }
 
+    private boolean shouldSkip(final HttpServletRequest servletRequest) {
+        if(skipPattern == null) return false;
+        final String url = servletRequest.getRequestURI().substring(servletRequest.getContextPath().length());
+        return skipPattern.matcher(url).matches();
+    }
+
     private void assignBlobAttribute(ByteArrayPrintWriter pw,
                                      HttpServletRequest httpRequest,
                                      HttpServletResponse httpResponse) throws IOException {
@@ -106,6 +127,9 @@ public class BlobFilter implements Filter {
     public void destroy() {
     }
 
+    private boolean isTraced(ServletRequest servletRequest) {
+        return servletRequest.getAttribute(SERVER_SPAN_CONTEXT) != null;
+    }
 
     private class BufferedRequestWrapper extends HttpServletRequestWrapper {
         ByteArrayInputStream bais;

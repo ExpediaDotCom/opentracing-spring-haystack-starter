@@ -76,10 +76,10 @@ public class BlobConfigurer {
 
     @Bean
     public FilterRegistrationBean blobFilter(BlobSettings settings) {
-        final BlobFilter blobFilter = new BlobFilter();
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(blobFilter);
-        filterRegistrationBean.addUrlPatterns(settings.getUrlPattern());
-        filterRegistrationBean.setOrder(settings.getFilterLevel());
+        final BlobFilter blobFilter = new BlobFilter(settings.getSkipPattern());
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean<>(blobFilter);
+        filterRegistrationBean.setUrlPatterns(settings.getUrlPatterns());
+        filterRegistrationBean.setOrder(settings.getFilterOrder());
         filterRegistrationBean.setAsyncSupported(true);
         return filterRegistrationBean;
     }

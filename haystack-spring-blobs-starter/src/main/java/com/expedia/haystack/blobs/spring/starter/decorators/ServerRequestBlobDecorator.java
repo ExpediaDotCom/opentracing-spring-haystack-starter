@@ -84,7 +84,7 @@ public class ServerRequestBlobDecorator implements ServletFilterSpanDecorator {
                     Collections.singletonMap(CONTENT_ENCODING, servletResponse.getHeader(CONTENT_ENCODING)) : Collections.emptyMap();
             write(responseBytes, blobContext, BlobType.RESPONSE, servletResponse.getContentType(), respMetadata);
         } else {
-            log.debug("skip blob logging for server request/response as blob condition has failed");
+            log.debug("skip blob logging for server request/response as blob condition are not met");
         }
     }
 
@@ -98,7 +98,7 @@ public class ServerRequestBlobDecorator implements ServletFilterSpanDecorator {
             final BlobContent blob = new BlobContent((byte[]) data, contentType, blobType);
             BlobWriteHelper.writeBlob(writer, blob, metadata);
         } else {
-            log.error("Fail to write server {} as blob in the span", blobType.getType());
+            log.debug("Skip logging server {} as a blob", blobType.getType());
         }
     }
 }
